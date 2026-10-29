@@ -1,0 +1,18 @@
+# Blueprint de Render: New > Blueprint > seleccionar este repositorio
+services:
+  - type: web
+    name: optica-backend
+    runtime: docker
+    plan: free
+    healthCheckPath: /actuator/health
+    envVars:
+      - key: DB_URL          # jdbc:postgresql://<host-neon>/optica?sslmode=require
+        sync: false
+      - key: DB_USER
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CORS_ORIGINS    # https://<tu-app>.vercel.app
+        sync: false

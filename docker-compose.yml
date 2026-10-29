@@ -1,0 +1,34 @@
+services:
+  db:
+    image: postgres:16
+    container_name: optica-db
+    environment:
+      POSTGRES_DB: optica
+      POSTGRES_USER: optica
+      POSTGRES_PASSWORD: optica
+    ports:
+      - "${DB_PORT:-5433}:5432"
+    volumes:
+      - optica-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U optica -d optica"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # Opcional: levantar también el backend en contenedor -> docker compose --profile full up
+  backend:
+    build: .
+    profiles: ["full"]
+    environment:
+      DB_URL: jdbc:postgresql://db:5432/optica
+      DB_USER: optica
+      DB_PASSWORD: optica
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  optica-data:
