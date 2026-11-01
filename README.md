@@ -52,7 +52,7 @@ Alternativa con todo en contenedores: `docker compose --profile full up --build`
 | `DB_USER` / `DB_PASSWORD` | `optica` / `optica` | Credenciales |
 | `JWT_SECRET` | clave de desarrollo | Mínimo 32 caracteres en producción |
 | `CORS_ORIGINS` | `http://localhost:3000` | Orígenes permitidos (separados por coma) |
-| `IGV_RATE` | `0.18` | Tasa de impuesto aplicada a las ventas |
+| `IGV_RATE` | `0.15` | Tasa del ISV (Honduras) aplicada a las ventas |
 | `STOCK_UMBRAL` | `5` | Umbral de alerta de stock bajo |
 | `PORT` | `8080` | Puerto HTTP (Render lo asigna) |
 

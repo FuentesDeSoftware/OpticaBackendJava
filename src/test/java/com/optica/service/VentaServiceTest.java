@@ -50,7 +50,7 @@ class VentaServiceTest {
     @BeforeEach
     void setUp() {
         service = new VentaService(clienteDAO, medicionDAO, aroDAO, lunaDAO, accesorioDAO, ventaDAO, apartadoDAO,
-                new BigDecimal("0.18"));
+                new BigDecimal("0.15"));
         Cliente cliente = new Cliente();
         cliente.setId(1L);
         when(clienteDAO.findById(1L)).thenReturn(Optional.of(cliente));
@@ -67,13 +67,13 @@ class VentaServiceTest {
         Venta v = service.cotizar(new VentaRequest(1L, 5L, 10L, 20L, List.of(
                 new VentaRequest.ItemAccesorio(30L, 1), new VentaRequest.ItemAccesorio(30L, 2))));
 
-        // 520 + 2 × 120 + 3 × 8 = 784.00 ; IGV 18 % = 141.12 ; total 925.12
+        // 520 + 2 × 120 + 3 × 8 = 784.00 ; ISV 15 % = 117.60 ; total 901.60
         assertThat(v.getDetalles()).hasSize(3);
         assertThat(v.getDetalles().get(1).getCantidad()).isEqualTo(VentaService.LUNAS_POR_PAR);
         assertThat(v.getDetalles().get(2).getCantidad()).isEqualTo(3);
         assertThat(v.getSubtotal()).isEqualByComparingTo("784.00");
-        assertThat(v.getIgv()).isEqualByComparingTo("141.12");
-        assertThat(v.getTotal()).isEqualByComparingTo("925.12");
+        assertThat(v.getIgv()).isEqualByComparingTo("117.60");
+        assertThat(v.getTotal()).isEqualByComparingTo("901.60");
         verify(ventaDAO, never()).save(any());
     }
 

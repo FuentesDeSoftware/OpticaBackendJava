@@ -227,7 +227,7 @@ erDiagram
 
 Decisiones de diseño:
 
-- **Integridad en la base de datos:** `CHECK (stock >= 0)`, eje entre 0 y 180°, DNI de 8 dígitos y claves foráneas obligatorias en `ventas`.
+- **Integridad en la base de datos:** `CHECK (stock >= 0)`, eje entre 0 y 180°, DNI de 13 dígitos (DNI hondureño) y claves foráneas obligatorias en `ventas`.
 - **Borrado lógico de productos** (`activo = false`): las ventas anteriores conservan sus referencias. El código del producto es único solo entre productos activos (índice único parcial), así que un código dado de baja puede reutilizarse.
 - **Mediciones** almacenadas por ojo: OD (derecho) y OI (izquierdo), con esfera, cilindro, eje y adición, más la distancia interpupilar (DIP).
 
@@ -257,7 +257,7 @@ Decisiones de diseño:
 | CRUD de aros, lunas y accesorios | `/vendedor/inventario` (pestañas) → `GET/POST/PUT/DELETE /api/vendedor/{aros,lunas,accesorios}`. |
 | Alerta de stock bajo (< 5) | `GET /api/vendedor/alertas-stock`. Se muestra un aviso en el panel y las filas en rojo en el inventario. El umbral se configura con `STOCK_UMBRAL`. |
 | Venta asociada a cliente, medición y aro | `/vendedor/ventas/nueva` → `POST /api/vendedor/ventas`. Valida que la medición pertenezca al cliente. |
-| Cálculo automático de subtotal, IGV y total | `VentaService.calcularTotales`: subtotal = Σ líneas; IGV = 18 % (`IGV_RATE`); total = subtotal + IGV. La vista previa en vivo usa `POST /cotizar`. |
+| Cálculo automático de subtotal, ISV y total | `VentaService.calcularTotales`: subtotal = Σ líneas; ISV = 15 % (`IGV_RATE`); total = subtotal + ISV. La vista previa en vivo usa `POST /cotizar`. |
 | Descuento automático de stock | En la misma transacción: aro −1, lunas −2 (un par) y accesorios −n. Si no alcanza el stock, se revierte todo. |
 | Extra | Registro de mediciones por el vendedor, historial de ventas con detalle y marcado del apartado como VENDIDO. |
 

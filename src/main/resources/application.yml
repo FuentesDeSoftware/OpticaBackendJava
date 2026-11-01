@@ -27,7 +27,8 @@ management:
         enabled: true
 
 optica:
-  igv: ${IGV_RATE:0.18}
+  # ISV de Honduras (15 %); la clave conserva el nombre igv por compatibilidad
+  igv: ${IGV_RATE:0.15}
   stock:
     umbral: ${STOCK_UMBRAL:5}
   jwt:
