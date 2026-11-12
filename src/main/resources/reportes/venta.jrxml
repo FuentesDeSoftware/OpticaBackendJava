@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Comprobante de una venta: una fila por DetalleVenta; la cabecera y los totales llegan como parámetros. -->
+<jasperReport name="venta" language="java" pageWidth="595" pageHeight="842" columnWidth="515"
+              leftMargin="40" rightMargin="40" topMargin="40" bottomMargin="40" whenNoDataType="AllSectionsNoDetail">
+	<style name="base" default="true" fontName="DejaVu Sans" fontSize="9.0"/>
+	<parameter name="NUMERO" class="java.lang.Long"/>
+	<parameter name="FECHA" class="java.time.LocalDateTime"/>
+	<parameter name="CLIENTE" class="java.lang.String"/>
+	<parameter name="CLIENTE_DNI" class="java.lang.String"/>
+	<parameter name="VENDEDOR" class="java.lang.String"/>
+	<parameter name="SUBTOTAL" class="java.math.BigDecimal"/>
+	<parameter name="ISV" class="java.math.BigDecimal"/>
+	<parameter name="TOTAL" class="java.math.BigDecimal"/>
+	<parameter name="TASA_ISV" class="java.math.BigDecimal"/>
+	<field name="descripcion" class="java.lang.String"/>
+	<field name="cantidad" class="java.lang.Integer"/>
+	<field name="precioUnitario" class="java.math.BigDecimal"/>
+	<field name="subtotal" class="java.math.BigDecimal"/>
+	<title height="120">
+		<element kind="staticText" x="0" y="0" width="300" height="24" fontSize="16.0" bold="true" forecolor="#1E3A5F">
+			<text><![CDATA[Óptica Visión Clara]]></text>
+		</element>
+		<element kind="staticText" x="0" y="24" width="300" height="14" forecolor="#666666">
+			<text><![CDATA[Comprobante de venta]]></text>
+		</element>
+		<element kind="textField" x="315" y="0" width="200" height="24" fontSize="14.0" bold="true" hTextAlign="Right">
+			<expression><![CDATA["Venta N.º " + $P{NUMERO}]]></expression>
+		</element>
+		<element kind="textField" x="315" y="24" width="200" height="14" hTextAlign="Right" forecolor="#666666">
+			<expression><![CDATA[$P{FECHA}.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))]]></expression>
+		</element>
+		<element kind="line" x="0" y="46" width="515" height="1" forecolor="#1E3A5F"/>
+		<element kind="staticText" x="0" y="56" width="70" height="16" bold="true">
+			<text><![CDATA[Cliente:]]></text>
+		</element>
+		<element kind="textField" x="70" y="56" width="250" height="16">
+			<expression><![CDATA[$P{CLIENTE}]]></expression>
+		</element>
+		<element kind="staticText" x="0" y="72" width="70" height="16" bold="true">
+			<text><![CDATA[DNI:]]></text>
+		</element>
+		<element kind="textField" x="70" y="72" width="250" height="16" blankWhenNull="true">
+			<expression><![CDATA[$P{CLIENTE_DNI}]]></expression>
+		</element>
+		<element kind="staticText" x="0" y="88" width="70" height="16" bold="true">
+			<text><![CDATA[Vendedor:]]></text>
+		</element>
+		<element kind="textField" x="70" y="88" width="250" height="16">
+			<expression><![CDATA[$P{VENDEDOR}]]></expression>
+		</element>
+	</title>
+	<columnHeader height="22">
+		<element kind="rectangle" x="0" y="0" width="515" height="20" mode="Opaque" backcolor="#1E3A5F" forecolor="#1E3A5F"/>
+		<element kind="staticText" x="6" y="0" width="275" height="20" bold="true" forecolor="#FFFFFF" vTextAlign="Middle">
+			<text><![CDATA[Producto]]></text>
+		</element>
+		<element kind="staticText" x="281" y="0" width="60" height="20" bold="true" forecolor="#FFFFFF" hTextAlign="Right" vTextAlign="Middle">
+			<text><![CDATA[Cant.]]></text>
+		</element>
+		<element kind="staticText" x="341" y="0" width="84" height="20" bold="true" forecolor="#FFFFFF" hTextAlign="Right" vTextAlign="Middle">
+			<text><![CDATA[P. unit.]]></text>
+		</element>
+		<element kind="staticText" x="425" y="0" width="84" height="20" bold="true" forecolor="#FFFFFF" hTextAlign="Right" vTextAlign="Middle">
+			<text><![CDATA[Subtotal]]></text>
+		</element>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<element kind="textField" x="6" y="0" width="275" height="20" textAdjust="StretchHeight" vTextAlign="Middle">
+				<expression><![CDATA[$F{descripcion}]]></expression>
+			</element>
+			<element kind="textField" x="281" y="0" width="60" height="20" hTextAlign="Right" vTextAlign="Middle">
+				<expression><![CDATA[$F{cantidad}]]></expression>
+			</element>
+			<element kind="textField" x="341" y="0" width="84" height="20" pattern="L #,##0.00" hTextAlign="Right" vTextAlign="Middle">
+				<expression><![CDATA[$F{precioUnitario}]]></expression>
+			</element>
+			<element kind="textField" x="425" y="0" width="84" height="20" pattern="L #,##0.00" hTextAlign="Right" vTextAlign="Middle">
+				<expression><![CDATA[$F{subtotal}]]></expression>
+			</element>
+			<element kind="line" x="0" y="19" width="515" height="1" forecolor="#DDDDDD"/>
+		</band>
+	</detail>
+	<summary height="80">
+		<element kind="staticText" x="305" y="10" width="120" height="16" hTextAlign="Right">
+			<text><![CDATA[Subtotal]]></text>
+		</element>
+		<element kind="textField" x="425" y="10" width="84" height="16" pattern="L #,##0.00" hTextAlign="Right">
+			<expression><![CDATA[$P{SUBTOTAL}]]></expression>
+		</element>
+		<element kind="textField" x="305" y="26" width="120" height="16" hTextAlign="Right">
+			<expression><![CDATA["ISV (" + $P{TASA_ISV}.movePointRight(2).stripTrailingZeros().toPlainString() + " %)"]]></expression>
+		</element>
+		<element kind="textField" x="425" y="26" width="84" height="16" pattern="L #,##0.00" hTextAlign="Right">
+			<expression><![CDATA[$P{ISV}]]></expression>
+		</element>
+		<element kind="line" x="305" y="45" width="210" height="1"/>
+		<element kind="staticText" x="305" y="50" width="120" height="20" fontSize="11.0" bold="true" hTextAlign="Right">
+			<text><![CDATA[Total]]></text>
+		</element>
+		<element kind="textField" x="425" y="50" width="84" height="20" fontSize="11.0" bold="true" pattern="L #,##0.00" hTextAlign="Right">
+			<expression><![CDATA[$P{TOTAL}]]></expression>
+		</element>
+	</summary>
+</jasperReport>

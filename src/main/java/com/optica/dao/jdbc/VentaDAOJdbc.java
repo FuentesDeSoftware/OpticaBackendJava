@@ -60,6 +60,12 @@ public class VentaDAOJdbc extends JdbcSupport implements VentaDAO {
         return queryList(SELECT + " WHERE v.cliente_id = ? ORDER BY v.fecha DESC", this::mapRow, clienteId);
     }
 
+    @Override
+    public List<Venta> findByRango(LocalDateTime desde, LocalDateTime hasta) {
+        return queryList(SELECT + " WHERE v.fecha >= ? AND v.fecha < ? ORDER BY v.fecha, v.id",
+                this::mapRow, desde, hasta);
+    }
+
     /**
      * Inserta la cabecera y sus detalles (en lote) usando la misma conexión.
      * Debe invocarse dentro de una transacción del servicio para que sea atómico.

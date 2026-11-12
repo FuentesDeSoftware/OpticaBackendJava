@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Receta oftalmológica: la fuente de datos tiene una sola Medicion; el cliente llega por parámetros. -->
+<jasperReport name="receta" language="java" pageWidth="595" pageHeight="842" columnWidth="515"
+              leftMargin="40" rightMargin="40" topMargin="40" bottomMargin="40">
+	<style name="base" default="true" fontName="DejaVu Sans" fontSize="10.0"/>
+	<style name="celda" hTextAlign="Center" vTextAlign="Middle">
+		<box>
+			<pen lineWidth="0.5" lineColor="#999999"/>
+		</box>
+	</style>
+	<parameter name="CLIENTE" class="java.lang.String"/>
+	<parameter name="CLIENTE_DNI" class="java.lang.String"/>
+	<field name="id" class="java.lang.Long"/>
+	<field name="fecha" class="java.time.LocalDate"/>
+	<field name="odEsfera" class="java.math.BigDecimal"/>
+	<field name="odCilindro" class="java.math.BigDecimal"/>
+	<field name="odEje" class="java.lang.Integer"/>
+	<field name="odAdicion" class="java.math.BigDecimal"/>
+	<field name="oiEsfera" class="java.math.BigDecimal"/>
+	<field name="oiCilindro" class="java.math.BigDecimal"/>
+	<field name="oiEje" class="java.lang.Integer"/>
+	<field name="oiAdicion" class="java.math.BigDecimal"/>
+	<field name="dip" class="java.math.BigDecimal"/>
+	<field name="observaciones" class="java.lang.String"/>
+	<title height="56">
+		<element kind="staticText" x="0" y="0" width="300" height="24" fontSize="16.0" bold="true" forecolor="#1E3A5F">
+			<text><![CDATA[Óptica Visión Clara]]></text>
+		</element>
+		<element kind="staticText" x="0" y="24" width="300" height="14" forecolor="#666666">
+			<text><![CDATA[Receta oftalmológica]]></text>
+		</element>
+		<element kind="line" x="0" y="46" width="515" height="1" forecolor="#1E3A5F"/>
+	</title>
+	<detail>
+		<band height="250">
+			<element kind="staticText" x="0" y="0" width="70" height="16" bold="true">
+				<text><![CDATA[Paciente:]]></text>
+			</element>
+			<element kind="textField" x="70" y="0" width="280" height="16">
+				<expression><![CDATA[$P{CLIENTE}]]></expression>
+			</element>
+			<element kind="staticText" x="0" y="16" width="70" height="16" bold="true">
+				<text><![CDATA[DNI:]]></text>
+			</element>
+			<element kind="textField" x="70" y="16" width="280" height="16" blankWhenNull="true">
+				<expression><![CDATA[$P{CLIENTE_DNI}]]></expression>
+			</element>
+			<element kind="textField" x="315" y="0" width="200" height="16" hTextAlign="Right">
+				<expression><![CDATA["Fecha: " + $F{fecha}.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy"))]]></expression>
+			</element>
+			<element kind="textField" x="315" y="16" width="200" height="16" hTextAlign="Right" forecolor="#666666">
+				<expression><![CDATA["Medición N.º " + $F{id}]]></expression>
+			</element>
+
+			<element kind="rectangle" x="0" y="48" width="515" height="22" mode="Opaque" backcolor="#1E3A5F" forecolor="#1E3A5F"/>
+			<element kind="staticText" x="0" y="48" width="115" height="22" bold="true" forecolor="#FFFFFF" style="celda">
+				<text><![CDATA[Ojo]]></text>
+			</element>
+			<element kind="staticText" x="115" y="48" width="100" height="22" bold="true" forecolor="#FFFFFF" style="celda">
+				<text><![CDATA[Esfera]]></text>
+			</element>
+			<element kind="staticText" x="215" y="48" width="100" height="22" bold="true" forecolor="#FFFFFF" style="celda">
+				<text><![CDATA[Cilindro]]></text>
+			</element>
+			<element kind="staticText" x="315" y="48" width="100" height="22" bold="true" forecolor="#FFFFFF" style="celda">
+				<text><![CDATA[Eje]]></text>
+			</element>
+			<element kind="staticText" x="415" y="48" width="100" height="22" bold="true" forecolor="#FFFFFF" style="celda">
+				<text><![CDATA[Adición]]></text>
+			</element>
+
+			<element kind="staticText" x="0" y="70" width="115" height="22" bold="true" style="celda">
+				<text><![CDATA[OD (derecho)]]></text>
+			</element>
+			<element kind="textField" x="115" y="70" width="100" height="22" pattern="+0.00;-0.00" blankWhenNull="true" style="celda">
+				<expression><![CDATA[$F{odEsfera}]]></expression>
+			</element>
+			<element kind="textField" x="215" y="70" width="100" height="22" pattern="+0.00;-0.00" blankWhenNull="true" style="celda">
+				<expression><![CDATA[$F{odCilindro}]]></expression>
+			</element>
+			<element kind="textField" x="315" y="70" width="100" height="22" blankWhenNull="true" style="celda">
+				<expression><![CDATA[$F{odEje} == null ? null : $F{odEje} + "°"]]></expression>
+			</element>
+			<element kind="textField" x="415" y="70" width="100" height="22" pattern="+0.00;-0.00" blankWhenNull="true" style="celda">
+				<expression><![CDATA[$F{odAdicion}]]></expression>
+			</element>
+
+			<element kind="staticText" x="0" y="92" width="115" height="22" bold="true" style="celda">
+				<text><![CDATA[OI (izquierdo)]]></text>
+			</element>
+			<element kind="textField" x="115" y="92" width="100" height="22" pattern="+0.00;-0.00" blankWhenNull="true" style="celda">
+				<expression><![CDATA[$F{oiEsfera}]]></expression>
+			</element>
+			<element kind="textField" x="215" y="92" width="100" height="22" pattern="+0.00;-0.00" blankWhenNull="true" style="celda">
+				<expression><![CDATA[$F{oiCilindro}]]></expression>
+			</element>
+			<element kind="textField" x="315" y="92" width="100" height="22" blankWhenNull="true" style="celda">
+				<expression><![CDATA[$F{oiEje} == null ? null : $F{oiEje} + "°"]]></expression>
+			</element>
+			<element kind="textField" x="415" y="92" width="100" height="22" pattern="+0.00;-0.00" blankWhenNull="true" style="celda">
+				<expression><![CDATA[$F{oiAdicion}]]></expression>
+			</element>
+
+			<element kind="staticText" x="0" y="126" width="180" height="16" bold="true">
+				<text><![CDATA[Distancia interpupilar (DIP):]]></text>
+			</element>
+			<element kind="textField" x="180" y="126" width="200" height="16" blankWhenNull="true">
+				<expression><![CDATA[$F{dip} == null ? null : $F{dip}.stripTrailingZeros().toPlainString() + " mm"]]></expression>
+			</element>
+			<element kind="staticText" x="0" y="150" width="515" height="16" bold="true">
+				<text><![CDATA[Observaciones:]]></text>
+			</element>
+			<element kind="textField" x="0" y="166" width="515" height="16" textAdjust="StretchHeight">
+				<expression><![CDATA[$F{observaciones} == null || $F{observaciones}.isBlank() ? "—" : $F{observaciones}]]></expression>
+			</element>
+		</band>
+	</detail>
+</jasperReport>

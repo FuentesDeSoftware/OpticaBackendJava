@@ -12,6 +12,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -26,6 +28,7 @@ class DaoJdbcIntegrationTest {
     @Autowired LunaDAO lunaDAO;
     @Autowired ClienteDAO clienteDAO;
     @Autowired MedicionDAO medicionDAO;
+    @Autowired VentaDAO ventaDAO;
     @Autowired VentaService ventaService;
 
     @Test
@@ -93,6 +96,19 @@ class DaoJdbcIntegrationTest {
                 new VentaRequest(clienteId, medicionId, aro.getId(), lunaId, null), 1L))
                 .isInstanceOf(StockInsuficienteException.class);
         assertThat(lunaDAO.findById(lunaId).orElseThrow().getStock()).isEqualTo(stockLuna);
+    }
+
+    @Test
+    void findByRangoFiltraPorFecha() {
+        Long clienteId = clienteDAO.findByDni("71234567").orElseThrow().getId();
+        Long medicionId = medicionDAO.findByCliente(clienteId).getFirst().getId();
+        Aro aro = aroDAO.save(nuevoAro("IT-RANGO", 1));
+        Long lunaId = lunaDAO.findAll().getFirst().getId();
+        Venta venta = ventaService.registrar(new VentaRequest(clienteId, medicionId, aro.getId(), lunaId, null), 1L);
+        LocalDateTime hoy = LocalDate.now().atStartOfDay();
+
+        assertThat(ventaDAO.findByRango(hoy, hoy.plusDays(1))).extracting(Venta::getId).contains(venta.getId());
+        assertThat(ventaDAO.findByRango(hoy.minusDays(1), hoy)).extracting(Venta::getId).doesNotContain(venta.getId());
     }
 
     private static Aro nuevoAro(String codigo, int stock) {

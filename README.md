@@ -72,6 +72,17 @@ Alternativa con todo en contenedores: `docker compose --profile full up --build`
 | GET | `/api/vendedor/clientes/{id}/apartados` | Vendedor |
 | POST | `/api/vendedor/ventas/cotizar` | Vendedor |
 | GET/POST | `/api/vendedor/ventas[/{id}]` | Vendedor |
+| GET | `/api/vendedor/reportes/ventas/{id}` — comprobante PDF | Vendedor |
+| GET | `/api/vendedor/reportes/ventas?desde=AAAA-MM-DD&hasta=AAAA-MM-DD` — ventas por fechas (PDF) | Vendedor |
+| GET | `/api/vendedor/reportes/inventario` — inventario y stock bajo (PDF) | Vendedor |
+| GET | `/api/vendedor/reportes/mediciones/{id}` — receta (PDF) | Vendedor |
+| GET | `/api/cliente/reportes/mediciones/{id}` — receta propia (PDF) | Cliente |
+
+### Reportes (JasperReports)
+
+Plantillas en `src/main/resources/reportes/*.jrxml` (formato JasperReports 7; se editan con Jaspersoft Studio 7).
+Se compilan la primera vez que se usan (`ReporteGenerator`) y se llenan con beans obtenidos de los DAO,
+sin pasar la conexión JDBC a Jasper. Las fuentes DejaVu van embebidas (`jasperreports-fonts`).
 
 ## Despliegue
 

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Ventas registradas entre dos fechas: una fila por Venta y totales en el resumen. -->
+<jasperReport name="ventas" language="java" pageWidth="595" pageHeight="842" columnWidth="515"
+              leftMargin="40" rightMargin="40" topMargin="40" bottomMargin="40" whenNoDataType="AllSectionsNoDetail">
+	<style name="base" default="true" fontName="DejaVu Sans" fontSize="8.5"/>
+	<parameter name="DESDE" class="java.time.LocalDate"/>
+	<parameter name="HASTA" class="java.time.LocalDate"/>
+	<field name="id" class="java.lang.Long"/>
+	<field name="fecha" class="java.time.LocalDateTime"/>
+	<field name="clienteNombre" class="java.lang.String"/>
+	<field name="vendedorNombre" class="java.lang.String"/>
+	<field name="subtotal" class="java.math.BigDecimal"/>
+	<field name="igv" class="java.math.BigDecimal"/>
+	<field name="total" class="java.math.BigDecimal"/>
+	<variable name="sumaSubtotal" class="java.math.BigDecimal" calculation="Sum">
+		<expression><![CDATA[$F{subtotal}]]></expression>
+	</variable>
+	<variable name="sumaIsv" class="java.math.BigDecimal" calculation="Sum">
+		<expression><![CDATA[$F{igv}]]></expression>
+	</variable>
+	<variable name="sumaTotal" class="java.math.BigDecimal" calculation="Sum">
+		<expression><![CDATA[$F{total}]]></expression>
+	</variable>
+	<title height="56">
+		<element kind="staticText" x="0" y="0" width="300" height="24" fontSize="16.0" bold="true" forecolor="#1E3A5F">
+			<text><![CDATA[Óptica Visión Clara]]></text>
+		</element>
+		<element kind="staticText" x="0" y="24" width="300" height="14" forecolor="#666666">
+			<text><![CDATA[Reporte de ventas]]></text>
+		</element>
+		<element kind="textField" x="265" y="24" width="250" height="14" hTextAlign="Right" forecolor="#666666">
+			<expression><![CDATA["Del " + $P{DESDE}.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+				+ " al " + $P{HASTA}.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy"))]]></expression>
+		</element>
+		<element kind="line" x="0" y="46" width="515" height="1" forecolor="#1E3A5F"/>
+	</title>
+	<columnHeader height="22">
+		<element kind="rectangle" x="0" y="0" width="515" height="20" mode="Opaque" backcolor="#1E3A5F" forecolor="#1E3A5F"/>
+		<element kind="staticText" x="4" y="0" width="36" height="20" bold="true" forecolor="#FFFFFF" vTextAlign="Middle">
+			<text><![CDATA[N.º]]></text>
+		</element>
+		<element kind="staticText" x="40" y="0" width="86" height="20" bold="true" forecolor="#FFFFFF" vTextAlign="Middle">
+			<text><![CDATA[Fecha]]></text>
+		</element>
+		<element kind="staticText" x="126" y="0" width="108" height="20" bold="true" forecolor="#FFFFFF" vTextAlign="Middle">
+			<text><![CDATA[Cliente]]></text>
+		</element>
+		<element kind="staticText" x="234" y="0" width="95" height="20" bold="true" forecolor="#FFFFFF" vTextAlign="Middle">
+			<text><![CDATA[Vendedor]]></text>
+		</element>
+		<element kind="staticText" x="329" y="0" width="62" height="20" bold="true" forecolor="#FFFFFF" hTextAlign="Right" vTextAlign="Middle">
+			<text><![CDATA[Subtotal]]></text>
+		</element>
+		<element kind="staticText" x="391" y="0" width="56" height="20" bold="true" forecolor="#FFFFFF" hTextAlign="Right" vTextAlign="Middle">
+			<text><![CDATA[ISV]]></text>
+		</element>
+		<element kind="staticText" x="447" y="0" width="64" height="20" bold="true" forecolor="#FFFFFF" hTextAlign="Right" vTextAlign="Middle">
+			<text><![CDATA[Total]]></text>
+		</element>
+	</columnHeader>
+	<detail>
+		<band height="18">
+			<element kind="textField" x="4" y="0" width="36" height="18" vTextAlign="Middle">
+				<expression><![CDATA["#" + $F{id}]]></expression>
+			</element>
+			<element kind="textField" x="40" y="0" width="86" height="18" vTextAlign="Middle">
+				<expression><![CDATA[$F{fecha}.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))]]></expression>
+			</element>
+			<element kind="textField" x="126" y="0" width="108" height="18" textAdjust="ScaleFont" vTextAlign="Middle">
+				<expression><![CDATA[$F{clienteNombre}]]></expression>
+			</element>
+			<element kind="textField" x="234" y="0" width="95" height="18" textAdjust="ScaleFont" vTextAlign="Middle">
+				<expression><![CDATA[$F{vendedorNombre}]]></expression>
+			</element>
+			<element kind="textField" x="329" y="0" width="62" height="18" pattern="#,##0.00" hTextAlign="Right" vTextAlign="Middle">
+				<expression><![CDATA[$F{subtotal}]]></expression>
+			</element>
+			<element kind="textField" x="391" y="0" width="56" height="18" pattern="#,##0.00" hTextAlign="Right" vTextAlign="Middle">
+				<expression><![CDATA[$F{igv}]]></expression>
+			</element>
+			<element kind="textField" x="447" y="0" width="64" height="18" pattern="#,##0.00" bold="true" hTextAlign="Right" vTextAlign="Middle">
+				<expression><![CDATA[$F{total}]]></expression>
+			</element>
+			<element kind="line" x="0" y="17" width="515" height="1" forecolor="#DDDDDD"/>
+		</band>
+	</detail>
+	<pageFooter height="20">
+		<element kind="textField" x="315" y="4" width="200" height="14" hTextAlign="Right" forecolor="#666666">
+			<expression><![CDATA["Página " + $V{PAGE_NUMBER}]]></expression>
+		</element>
+	</pageFooter>
+	<summary height="44">
+		<element kind="line" x="0" y="4" width="515" height="1"/>
+		<element kind="textField" x="4" y="8" width="230" height="18" bold="true" vTextAlign="Middle">
+			<expression><![CDATA[$V{REPORT_COUNT} == 0 ? "No hay ventas en el período" : $V{REPORT_COUNT} + " venta(s) — Totales (L)"]]></expression>
+		</element>
+		<element kind="textField" x="329" y="8" width="62" height="18" pattern="#,##0.00" bold="true" hTextAlign="Right" vTextAlign="Middle">
+			<expression><![CDATA[$V{sumaSubtotal} == null ? java.math.BigDecimal.ZERO : $V{sumaSubtotal}]]></expression>
+		</element>
+		<element kind="textField" x="391" y="8" width="56" height="18" pattern="#,##0.00" bold="true" hTextAlign="Right" vTextAlign="Middle">
+			<expression><![CDATA[$V{sumaIsv} == null ? java.math.BigDecimal.ZERO : $V{sumaIsv}]]></expression>
+		</element>
+		<element kind="textField" x="447" y="8" width="64" height="18" pattern="#,##0.00" bold="true" hTextAlign="Right" vTextAlign="Middle">
+			<expression><![CDATA[$V{sumaTotal} == null ? java.math.BigDecimal.ZERO : $V{sumaTotal}]]></expression>
+		</element>
+	</summary>
+</jasperReport>

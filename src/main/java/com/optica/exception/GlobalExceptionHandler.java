@@ -1,5 +1,6 @@
 package com.optica.exception;
 
+import com.optica.report.ReporteException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -64,6 +65,12 @@ public class GlobalExceptionHandler {
         }
         log.error("Error de base de datos", e);
         return respuesta(HttpStatus.INTERNAL_SERVER_ERROR, "Error de base de datos");
+    }
+
+    @ExceptionHandler(ReporteException.class)
+    public ResponseEntity<Map<String, Object>> reporte(ReporteException e) {
+        log.error("Error al generar el reporte", e);
+        return respuesta(HttpStatus.INTERNAL_SERVER_ERROR, "No se pudo generar el reporte");
     }
 
     private ResponseEntity<Map<String, Object>> respuesta(HttpStatus status, String mensaje) {

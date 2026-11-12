@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Inventario de productos activos agrupado por tipo; el stock bajo el umbral se resalta en rojo. -->
+<jasperReport name="inventario" language="java" pageWidth="595" pageHeight="842" columnWidth="515"
+              leftMargin="40" rightMargin="40" topMargin="40" bottomMargin="40" whenNoDataType="AllSectionsNoDetail">
+	<style name="base" default="true" fontName="DejaVu Sans" fontSize="9.0"/>
+	<style name="stock">
+		<conditionalStyle forecolor="#C62828" bold="true">
+			<conditionExpression><![CDATA[$F{stockBajo}]]></conditionExpression>
+		</conditionalStyle>
+	</style>
+	<parameter name="UMBRAL" class="java.lang.Integer"/>
+	<field name="tipo" class="java.lang.String"/>
+	<field name="codigo" class="java.lang.String"/>
+	<field name="descripcion" class="java.lang.String"/>
+	<field name="precio" class="java.math.BigDecimal"/>
+	<field name="stock" class="java.lang.Integer"/>
+	<field name="stockBajo" class="java.lang.Boolean"/>
+	<variable name="bajos" class="java.lang.Integer" calculation="Sum">
+		<expression><![CDATA[$F{stockBajo} ? 1 : 0]]></expression>
+	</variable>
+	<group name="tipo">
+		<expression><![CDATA[$F{tipo}]]></expression>
+		<groupHeader>
+			<band height="44">
+				<element kind="textField" x="0" y="8" width="515" height="16" fontSize="11.0" bold="true" forecolor="#1E3A5F">
+					<expression><![CDATA[$F{tipo}]]></expression>
+				</element>
+				<element kind="rectangle" x="0" y="24" width="515" height="18" mode="Opaque" backcolor="#E8EEF5" forecolor="#E8EEF5"/>
+				<element kind="staticText" x="4" y="24" width="80" height="18" bold="true" vTextAlign="Middle">
+					<text><![CDATA[Código]]></text>
+				</element>
+				<element kind="staticText" x="84" y="24" width="271" height="18" bold="true" vTextAlign="Middle">
+					<text><![CDATA[Descripción]]></text>
+				</element>
+				<element kind="staticText" x="355" y="24" width="90" height="18" bold="true" hTextAlign="Right" vTextAlign="Middle">
+					<text><![CDATA[Precio]]></text>
+				</element>
+				<element kind="staticText" x="445" y="24" width="66" height="18" bold="true" hTextAlign="Right" vTextAlign="Middle">
+					<text><![CDATA[Stock]]></text>
+				</element>
+			</band>
+		</groupHeader>
+	</group>
+	<title height="56">
+		<element kind="staticText" x="0" y="0" width="300" height="24" fontSize="16.0" bold="true" forecolor="#1E3A5F">
+			<text><![CDATA[Óptica Visión Clara]]></text>
+		</element>
+		<element kind="staticText" x="0" y="24" width="300" height="14" forecolor="#666666">
+			<text><![CDATA[Reporte de inventario]]></text>
+		</element>
+		<element kind="textField" x="265" y="24" width="250" height="14" hTextAlign="Right" forecolor="#666666">
+			<expression><![CDATA["Generado el " + java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))]]></expression>
+		</element>
+		<element kind="line" x="0" y="46" width="515" height="1" forecolor="#1E3A5F"/>
+	</title>
+	<detail>
+		<band height="18">
+			<element kind="textField" x="4" y="0" width="80" height="18" vTextAlign="Middle">
+				<expression><![CDATA[$F{codigo}]]></expression>
+			</element>
+			<element kind="textField" x="84" y="0" width="271" height="18" textAdjust="ScaleFont" vTextAlign="Middle">
+				<expression><![CDATA[$F{descripcion}]]></expression>
+			</element>
+			<element kind="textField" x="355" y="0" width="90" height="18" pattern="L #,##0.00" hTextAlign="Right" vTextAlign="Middle">
+				<expression><![CDATA[$F{precio}]]></expression>
+			</element>
+			<element kind="textField" x="445" y="0" width="66" height="18" style="stock" hTextAlign="Right" vTextAlign="Middle">
+				<expression><![CDATA[$F{stock}]]></expression>
+			</element>
+			<element kind="line" x="0" y="17" width="515" height="1" forecolor="#DDDDDD"/>
+		</band>
+	</detail>
+	<pageFooter height="20">
+		<element kind="textField" x="315" y="4" width="200" height="14" hTextAlign="Right" forecolor="#666666">
+			<expression><![CDATA["Página " + $V{PAGE_NUMBER}]]></expression>
+		</element>
+	</pageFooter>
+	<summary height="36">
+		<element kind="line" x="0" y="6" width="515" height="1"/>
+		<element kind="textField" x="4" y="12" width="507" height="18" vTextAlign="Middle">
+			<expression><![CDATA[$V{REPORT_COUNT} + " producto(s) activo(s). "
+				+ ($V{bajos} == null || $V{bajos} == 0 ? "Ninguno" : $V{bajos} + "")
+				+ " con stock menor que " + $P{UMBRAL} + " (en rojo)."]]></expression>
+		</element>
+	</summary>
+</jasperReport>

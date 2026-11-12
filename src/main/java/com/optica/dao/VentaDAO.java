@@ -2,6 +2,7 @@ package com.optica.dao;
 
 import com.optica.model.Venta;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -11,4 +12,7 @@ import java.util.List;
 public interface VentaDAO extends GenericDAO<Venta, Long> {
 
     List<Venta> findByCliente(Long clienteId);
+
+    /** Ventas con {@code desde <= fecha < hasta}, de la más antigua a la más reciente (sin detalle). */
+    List<Venta> findByRango(LocalDateTime desde, LocalDateTime hasta);
 }
