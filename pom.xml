@@ -80,6 +80,18 @@
 			<artifactId>jasperreports-fonts</artifactId>
 			<version>${jasperreports.version}</version>
 		</dependency>
+		<!-- Compila las expresiones de los .jrxml con el classloader: javac no ve los jars anidados del jar de Spring Boot -->
+		<dependency>
+			<groupId>net.sf.jasperreports</groupId>
+			<artifactId>jasperreports-jdt</artifactId>
+			<version>${jasperreports.version}</version>
+		</dependency>
+		<!-- La versión transitiva (3.21) no lee las clases de Java 21 -->
+		<dependency>
+			<groupId>org.eclipse.jdt</groupId>
+			<artifactId>ecj</artifactId>
+			<version>3.46.100</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.postgresql</groupId>

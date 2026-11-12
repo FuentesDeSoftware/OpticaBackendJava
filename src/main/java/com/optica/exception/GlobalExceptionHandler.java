@@ -4,6 +4,7 @@ import com.optica.report.ReporteException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -13,7 +14,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/** Traduce las excepciones a respuestas JSON {@code {"mensaje": "..."}}. */
+/**
+ * Traduce las excepciones a respuestas JSON {@code {"mensaje": "..."}}. El tipo se fija a JSON porque
+ * jasperreports trae jackson-dataformat-xml y una pestaña del navegador (que pide XML) recibiría XML.
+ */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -47,7 +51,7 @@ public class GlobalExceptionHandler {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("mensaje", "Datos inválidos");
         body.put("errores", errores);
-        return ResponseEntity.badRequest().body(body);
+        return ResponseEntity.badRequest().contentType(MediaType.APPLICATION_JSON).body(body);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
@@ -74,6 +78,6 @@ public class GlobalExceptionHandler {
     }
 
     private ResponseEntity<Map<String, Object>> respuesta(HttpStatus status, String mensaje) {
-        return ResponseEntity.status(status).body(Map.of("mensaje", mensaje));
+        return ResponseEntity.status(status).contentType(MediaType.APPLICATION_JSON).body(Map.of("mensaje", mensaje));
     }
 }
